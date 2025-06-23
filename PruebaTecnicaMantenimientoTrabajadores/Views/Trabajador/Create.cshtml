@@ -1,0 +1,93 @@
+﻿@model PruebaTecnicaMantenimientoTrabajadores.Models.Entities.Trabajador
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="createModalLabel">Nuevo Trabajador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label asp-for="TipoDocumento"  class="d-block form-label">Tipo Documento</label>
+                            <select asp-for="TipoDocumento" class="form-select" id="data_TipoDocumento">
+                                <option value="DNI">DNI</option>
+                                <option value="RUC">RUC</option>
+                            </select>
+                            <span asp-validation-for="TipoDocumento" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="NumeroDocumento" class="form-label">Numero de Documento</label>
+                            <input asp-for="NumeroDocumento" class="form-control" id="create_NumeroDocumento" />
+                            <span asp-validation-for="NumeroDocumento" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Nombres" class="form-label">Nombres</label>
+                            <input asp-for="Nombres" class="form-control" id="create_Nombres" />
+                            <span asp-validation-for="Nombres" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label d-block">Sexo</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="Sexo" id="c_data_Sexo_M" value="M">
+                                <label asp-for="Sexo" class="form-check-label" for="data_Sexo_M">Masculino</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="Sexo" id="c_data_Sexo_F" value="F">
+                                <label asp-for="Sexo" class="form-check-label" for="data_Sexo_F">Femenino</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="IdDepartamento" class="form-label">Departamento</label>
+                            <select asp-for="IdDepartamento" asp-items="ViewBag.IdDepartamento" class="form-select" id="create_Departamento">
+                                <option value="" disabled selected hidden>-- Seleccione Departamento --</option>
+                            </select>
+                            <span asp-validation-for="IdDepartamento" class="text-danger"></span>
+                        </div>
+                        
+                        <div class="col-md-4">
+                            <label asp-for="IdProvincia" class="form-label">Provincia</label>
+                            <select asp-for="IdProvincia" class="form-select" id="create_Provincia" disabled>
+                                <option value="" disabled selected hidden>-- Seleccione Provincia --</option>
+                            </select>
+                            <span asp-validation-for="IdProvincia" class="text-danger"></span>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="IdDistrito" class="form-label">Distrito</label>
+                            <select asp-for="IdDistrito" class="form-select" id="create_Distrito" disabled>
+                                <option value="" disabled selected hidden>-- Seleccione Distrito --</option>
+                            </select>
+                            <span asp-validation-for="IdDistrito" class="text-danger"></span>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+                        
+
+

@@ -1,0 +1,41 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Rauder\\Desktop\\prueba\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D701BA32-1BE0-40A1-9186-B21D5D3E7BF1}|PruebaTecnicaMantenimientoTrabajadores\\PruebaTecnicaMantenimientoTrabajadores.csproj|c:\\users\\rauder\\desktop\\prueba\\pruebatecnicamantenimientotrabajadores\\controllers\\trabajadorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D701BA32-1BE0-40A1-9186-B21D5D3E7BF1}|PruebaTecnicaMantenimientoTrabajadores\\PruebaTecnicaMantenimientoTrabajadores.csproj|solutionrelative:pruebatecnicamantenimientotrabajadores\\controllers\\trabajadorcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{56df62a4-05a3-4e5b-aa1a-99371ccfb997}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "TrabajadorController.cs",
+              "DocumentMoniker": "C:\\Users\\Rauder\\Desktop\\prueba\\PruebaTecnicaMantenimientoTrabajadores\\Controllers\\TrabajadorController.cs",
+              "RelativeDocumentMoniker": "PruebaTecnicaMantenimientoTrabajadores\\Controllers\\TrabajadorController.cs",
+              "ToolTip": "C:\\Users\\Rauder\\Desktop\\prueba\\PruebaTecnicaMantenimientoTrabajadores\\Controllers\\TrabajadorController.cs",
+              "RelativeToolTip": "PruebaTecnicaMantenimientoTrabajadores\\Controllers\\TrabajadorController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-23T19:08:03.938Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

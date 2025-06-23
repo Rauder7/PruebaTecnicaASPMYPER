@@ -1,0 +1,243 @@
+﻿@model IEnumerable<PruebaTecnicaMantenimientoTrabajadores.Models.Dtos.TrabajadorDto>
+@{
+    ViewData["Title"] = "Listado de Trabajadores";
+
+
+}
+
+<h3 class="text-center mt-4 mb-4">Listado de Trabajadores</h3>
+<form method="get" asp-action="Index" class="mb-3" style="max-width: 300px;">
+    <div class="input-group">
+        <label class="input-group-text" for="sexo">Filtrar por sexo</label>
+        <select name="sexo" id="sexo" class="form-select" onchange="this.form.submit()">
+            <option value="">Todos</option>
+            <option value="F" selected="@(ViewBag.FiltroSexo == "F")">Femenino</option>
+            <option value="M" selected="@(ViewBag.FiltroSexo == "M")">Masculino</option>
+        </select>
+    </div>
+</form>
+
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#createModal">
+    Nuevo Registro
+</button>
+
+<!-- Modal parcial -->
+@Html.Partial("Create", new PruebaTecnicaMantenimientoTrabajadores.Models.Entities.Trabajador())
+@Html.Partial("Edit", new PruebaTecnicaMantenimientoTrabajadores.Models.Entities.Trabajador())
+@Html.Partial("Delete", new PruebaTecnicaMantenimientoTrabajadores.Models.Entities.Trabajador())
+
+
+<table class="table table-bordered text-center">
+    <thead class="table">
+        <tr>
+            <th>Tipo Documento</th>
+            <th>Nro Documento</th>
+            <th>Nombres</th>
+            <th>Sexo</th>
+            <th>Departamento</th>
+            <th>Provincia</th>
+            <th>Distrito</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            var rowClass = item.Sexo == "M" ? "table-primary" : "table-warning";
+            var trabajadorJson = System.Text.Json.JsonSerializer.Serialize(new
+            {
+                item.Id,
+                item.Nombres,
+                item.TipoDocumento,
+                item.NumeroDocumento,
+                item.Sexo,
+                item.IdDepartamento,
+                item.IdProvincia,
+                item.IdDistrito
+            });
+            <tr class="@rowClass">
+                <td>@item.TipoDocumento</td>
+                <td>@item.NumeroDocumento</td>
+                <td>@item.Nombres</td>
+                <td>@item.Sexo</td>
+                <td>@item.NombreDepartamento</td>
+                <td>@item.NombreProvincia</td>
+                <td>@item.NombreDistrito</td>
+                <td>
+                    <button type="button" class="btn btn-warning btn-sm btn-edit" data-trabajador='@Html.Raw(trabajadorJson)' data-bs-toggle="modal" data-bs-target="#editModal"> Editar </button>
+                    <button type="button" class="btn btn-danger btn-sm btn-delete" data-id="@item.Id" data-bs-toggle="modal" data-bs-target="#deleteModal"> Eliminar </button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+        const createModal = document.getElementById('createModal');
+        const createForm  = createModal.querySelector('form');
+
+        createModal.addEventListener('hidden.bs.modal', function () {
+            createForm.reset();
+            document.getElementById('create_Provincia').innerHTML = '';
+            document.getElementById('create_Distrito').innerHTML  = '';
+        });
+          // Obtener elementos de editar
+            const editButtons = document.querySelectorAll(".btn-edit");
+            const ddlDep  = document.getElementById('data_IdDepartamento');
+            const ddlProv = document.getElementById('data_IdProvincia');
+            const ddlDist = document.getElementById('data_IdDistrito');
+
+          // Obtener elementos de eliminar
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+            const deleteInput   = document.getElementById('delete-id');
+            deleteButtons.forEach(btn => {
+                btn.addEventListener('click', function () {
+                deleteInput.value = this.dataset.id;
+                });
+            });
+
+          // Obtener elementos de crear
+            const cdDep  = document.getElementById('create_Departamento');
+            const cdProv = document.getElementById('create_Provincia');
+            const cdDist = document.getElementById('create_Distrito');
+
+          // Obener provincias de endpoint
+            async function loadProvincias(idDepartamento, selectedProvincia = null) {
+                const res  = await fetch(`/Trabajador/GetProvincias?idDepartamento=${idDepartamento}`);
+                const data = await res.json();
+                console.log('Id departamento', idDepartamento, 'data: ', data)
+                return data;
+            }
+
+          //Obtener distritos de endpoint
+            async function loadDistritos(idProvincia, selectedDistrito = null) {
+                const res  = await fetch(`/Trabajador/GetDistritos?idProvincia=${idProvincia}`);
+                const data = await res.json();
+                console.log('Id provincia', idProvincia, 'data: ', data)
+                return data;
+            }
+
+            // 3) Rellenar datos de distrito y provincia para editar
+             async function populateEditUbigeo(idDept, idProv, idDist) {
+                const provs = await loadProvincias(idDept);
+                ddlProv.innerHTML = '';
+                provs.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value    = p.id; opt.text = p.nombreProvincia;
+                    if (p.id == idProv) opt.selected = true;
+                    ddlProv.appendChild(opt);
+                });
+
+                const dists = await loadDistritos(idProv);
+                ddlDist.innerHTML = '';
+                dists.forEach(d => {
+                    const opt = document.createElement('option');
+                    opt.value    = d.id; opt.text = d.nombreDistrito;
+                    if (d.id == idDist) opt.selected = true;
+                    ddlDist.appendChild(opt);
+                });
+            }
+
+            // 4) Rellenar datos de distrito y provincia para crear
+            async function populateCreateUbigeo(idDept) {
+                // Provincias
+                const provs = await loadProvincias(idDept);
+                cdProv.innerHTML = '';
+                provs.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.id; opt.text = p.nombreProvincia;
+                    cdProv.appendChild(opt);
+                });
+                cdDist.innerHTML = '';
+            }
+
+            // volver a rellenar datos para editar si el dropdown list cambia
+            ddlDep.addEventListener('change', async () => {
+                if (ddlDep.value) {
+                    await populateEditUbigeo(ddlDep.value, null, null);
+                } else {
+                    ddlProv.innerHTML = '';
+                    ddlDist.innerHTML = '';
+                }
+            });
+            ddlProv.addEventListener('change', async () => {
+                if (ddlProv.value) {
+                    const data = await loadDistritos(ddlProv.value);
+                    ddlDist.innerHTML = '';
+                    data.forEach(d => {
+                        const opt = document.createElement('option');
+                        opt.value = d.id; opt.text = d.nombreDistrito;
+                        ddlDist.appendChild(opt);
+                    });
+                } else {
+                    ddlDist.innerHTML = '';
+                }
+            });
+
+            // volver a rellenar datos para editar si el dropdown list cambia
+            cdDep.addEventListener('change', async function() {
+                const id = this.value;
+                // Siempre resetea hijo y nieto
+                cdProv.innerHTML = '<option value="">-- Seleccione Provincia --</option>';
+                cdDist.innerHTML = '<option value="">-- Seleccione Distrito --</option>';
+                cdDist.disabled = true;
+
+                if (id) {
+                // Habilita provincia
+                    cdProv.disabled = false;
+                    const provincias = await loadProvincias(id);
+                    provincias.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id; opt.text = p.nombreProvincia;
+                        cdProv.appendChild(opt);
+                    });
+                }else {
+                // si no hay departamento, se deja todo bloqueado
+                    cdProv.disabled = true;
+                }
+            });
+
+            cdProv.addEventListener('change', async function() {
+                const id = this.value;
+                cdDist.innerHTML = '<option value="">-- Seleccione Distrito --</option>';
+                if (id) {
+                    cdDist.disabled = false;
+                    const distritos = await loadDistritos(id);
+                    distritos.forEach(d => {
+                        const opt = document.createElement('option');
+                        opt.value = d.id; opt.text = d.nombreDistrito;
+                        cdDist.appendChild(opt);
+                    });
+                } else {
+                    cdDist.disabled = true;
+                }
+            });
+
+            // Rellenar datos al modal de editar
+            editButtons.forEach(button => {
+                button.addEventListener("click", async function () {
+                    const data = JSON.parse(this.dataset.trabajador);
+                    document.getElementById("data_Id").value               = data.Id;
+                    document.getElementById("data_TipoDocumento").value   = data.TipoDocumento;
+                    document.getElementById("data_NumeroDocumento").value = data.NumeroDocumento;
+                    document.getElementById("data_Nombres").value         = data.Nombres;
+                    if (data.Sexo === "M") {
+                        document.getElementById("data_Sexo_M").checked = true;
+                    }
+                    else {
+                        document.getElementById("data_Sexo_F").checked = true;
+                    }
+
+                    ddlDep.value = data.IdDepartamento;
+                    await populateEditUbigeo(data.IdDepartamento, data.IdProvincia, data.IdDistrito);
+                });
+            });
+        });
+    </script>
+}

@@ -1,0 +1,81 @@
+﻿@model PruebaTecnicaMantenimientoTrabajadores.Models.Entities.Trabajador
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" id="data_Id" class="form-control" />
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Trabajador</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger  mb-3"></div>
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label asp-for="TipoDocumento" class="form-label d-block" req>Tipo Documento</label>
+                            <select asp-for="TipoDocumento" class="form-select" required id="data_TipoDocumento">
+                                <option value="DNI">DNI</option>
+                                <option value="RUC">RUC</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="NumeroDocumento" class="form-label">Numero de Documento</label>
+                            <input asp-for="NumeroDocumento" type="text" id="data_NumeroDocumento" required class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Nombres" class="form-label">Nombres</label>
+                            <input asp-for="Nombres" type="text" id="data_Nombres" required class="form-control" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label d-block">Sexo</label>
+                            <div class="form-check  form-check-inline">
+                                <input class="form-check-input" type="radio" name="Sexo" required id="data_Sexo_M" value="M">
+                                <label asp-for="Sexo" class="form-check-label" for="data_Sexo_M">Masculino</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="Sexo" required id="data_Sexo_F" value="F">
+                                <label asp-for="Sexo" class="form-check-label" for="data_Sexo_F">Femenino</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="IdDepartamento" class="form-label">Departamento</label>
+                            <select asp-for="IdDepartamento" asp-items="ViewBag.IdDepartamento" required id="data_IdDepartamento" class="form-select">
+                                <option value="" disabled selected hidden>-- Seleccione Provincia --</option>
+                            </select>
+                        </div>       
+                        
+                        <div class="col-md-4">
+                            <label asp-for="IdDepartamento" class="form-label">Provincia</label>
+                            <select asp-for="IdProvincia" id="data_IdProvincia" required class="form-select">
+
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label asp-for="IdDistrito" class="form-label">Distrito</label>
+                            <select asp-for="IdDistrito" id="data_IdDistrito" required class="form-select">
+                                <option value="" disabled selected hidden>-- Seleccione Distrito --</option>
+                            </select>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
